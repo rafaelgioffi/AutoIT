@@ -1,0 +1,1539 @@
+#include <GUIConstantsEx.au3>
+#include <StaticConstants.au3>
+#include <EditConstants.au3>
+#include <WindowsConstants.au3>
+#include <ButtonConstants.au3>
+#include <FileConstants.au3>
+#include <MsgBoxConstants.au3>
+#include <Array.au3>
+#include <WinAPIShPath.au3>
+#include "GIFAnimation.au3"
+#include <ColorConstants.au3>
+#include <GUIConstantsEx.au3>
+#RequireAdmin
+
+;~ primeira tela...
+Local $princ = GUICreate("Instalador de Softwares para Windows - 2.0", 445, 760, -1, -1, $WS_EX_TOPMOST)
+GUISetBkColor(0xFFFFFF, $princ)
+
+;~ variaveis...
+Global $status
+Global $barra1
+Global $porc
+
+Local $cred1 = GUICtrlCreateLabel("Desenvolvido por: Rafael Gioffi  -  rafaelgioffi@gmail.com", 1, 715, 444, 25, $SS_CENTER)
+GUICtrlSetFont($cred1, 8.5, 300, "", "", 5)
+GUICtrlSetColor($cred1, 0x0000FF)
+;~ pasta de imagens...
+Global $imgdir = @ScriptDir & "\images\starter\"
+;~ softs básicos...
+Local $bas = GUICtrlCreateGroup("Softwares Básicos", 3, 3, 360, 65, $BS_MULTILINE)
+GUICtrlSetFont($bas, 14, 280, "", "", 5)
+GUICtrlCreatePic($imgdir & "adobe_reader.jpg", 10, 28, 32, 32)
+GUICtrlCreatePic($imgdir & ".net46.jpg", 45, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "directx9.jpg", 80, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "chrome.jpg", 115, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "java.jpg", 150, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "flash.jpg", 185, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "winrar.jpg", 220, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "diskdefrag.jpg", 255, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "atube.jpg", 290, 28, 32, 32)
+GUICtrlCreatePic($imgdir & "pdfcreator.jpg", 325, 28, 32, 32)
+
+;~ players...
+Local $play = GUICtrlCreateGroup("Players", 3, 70, 80, 65, $BS_MULTILINE)
+GUICtrlSetFont($play, 11, 280, "", "", 5)
+GUICtrlCreatePic($imgdir & "potplayer.jpg", 10, 95, 32, 32)
+GUICtrlCreatePic($imgdir & "klmp.jpg", 45, 95, 32, 32)
+;~ av...
+GUICtrlCreateGroup("Anti-Vírus", 93, 70, 75, 65, $BS_MULTILINE)
+
+GUICtrlCreatePic($imgdir & "eset.jpg", 105, 95, 32, 32)
+;~ office...
+GUICtrlCreateGroup("Office", 185, 70, 120, 65, $BS_MULTILINE)
+
+GUICtrlCreatePic($imgdir & "office2010.jpg", 190, 95, 32, 32)
+GUICtrlCreatePic($imgdir & "office2013.jpg", 225, 95, 32, 32)
+GUICtrlCreatePic($imgdir & "office2016.jpg", 265, 95, 32, 32)
+
+;~ configurações...
+GUICtrlCreateGroup("Configurações", 3, 140, 430, 400, $BS_MULTILINE)
+;~ players radios...
+Local $grpPlay = GUICtrlCreateGroup("Player de vídeo", 7, 160, 350, 50, $BS_MULTILINE)
+GUICtrlSetFont($grpPlay, 11, 280, "", "", 5)
+Global $potplay = GUICtrlCreateRadio("PotPlayer", 12, 180, 90, 20)
+Local $klmpplay = GUICtrlCreateRadio("K-Lite Mega Pack", 107, 180, 140, 20)
+Local $nplay = GUICtrlCreateRadio("Sem Player", 252, 180, 100, 20)
+GUICtrlSetFont($potplay,10)
+GUICtrlSetFont($klmpplay,10)
+GUICtrlSetFont($nplay,10)
+
+;~ av radios...
+Local $grpAv = GUICtrlCreateGroup("Anti-vírus", 7, 215, 290, 50, $BS_MULTILINE)
+GUICtrlSetFont($grpAv, 11, 280, "", "", 5)
+Local $esetav = GUICtrlCreateRadio("Eset Anti-Vírus 11 x64", 12, 235, 160, 20)
+Local $nav = GUICtrlCreateRadio("Sem Anti-vírus", 175, 235, 120, 20)
+GUICtrlSetFont($esetav,10)
+GUICtrlSetFont($nav,10)
+
+;~ linha 1...
+;~ adobe...
+Local $grpAdobe = GUICtrlCreateGroup("Adobe Reader?",7, 270, 125, 40)
+GUICtrlSetFont($grpAdobe, 11, 280, "", "", 5)
+Local $adobeSim = GUICtrlCreateRadio("Sim", 17, 288, 50, 15)
+Local $adobeNao = GUICtrlCreateRadio("Não", 77, 288, 50, 15)
+GUICtrlSetFont($adobeSim,10)
+GUICtrlSetFont($adobeNao,10)
+;~ .net...
+Local $grpNet = GUICtrlCreateGroup(".NET Framework 4.6.1?",140,270,165,40)
+GUICtrlSetFont($grpNet, 11, 280, "", "", 5)
+Local $netSim = GUICtrlCreateRadio("Sim", 167, 288, 50, 15)
+Local $netNao = GUICtrlCreateRadio("Não", 227, 288, 50, 15)
+GUICtrlSetFont($netSim,10)
+GUICtrlSetFont($netNao,10)
+;~ directX...
+Local $grpDx = GUICtrlCreateGroup("DirectX 9?", 315, 270, 115, 40)
+GUICtrlSetFont($grpDx,11, 280, "", "", 5)
+Local $dxSim = GUICtrlCreateRadio("Sim", 327, 288, 50, 15)
+Local $dxNao = GUICtrlCreateRadio("Não", 377, 288, 50, 15)
+GUICtrlSetFont($dxSim,10)
+GUICtrlSetFont($dxNao,10)
+;~ linha 2...
+;~ Chrome...
+Local $grpChrome = GUICtrlCreateGroup("Google Chrome?", 7, 315, 125, 40)
+GUICtrlSetFont($grpChrome,11, 280, "", "", 5)
+Local $chromeSim = GUICtrlCreateRadio("Sim", 17, 333, 50, 15)
+Local $chromeNao = GUICtrlCreateRadio("Não", 77, 333, 50, 15)
+GUICtrlSetFont($chromeSim,10)
+GUICtrlSetFont($chromeNao,10)
+;~ java 32...
+Local $grpjava32 = GUICtrlCreateGroup("Java JRE 32 bits?", 145, 315, 130, 40)
+GUICtrlSetFont($grpjava32,11, 280, "", "", 5)
+Local $java32Sim = GUICtrlCreateRadio("Sim", 157, 333, 50, 15)
+Local $java32Nao = GUICtrlCreateRadio("Não", 217, 333, 50, 15)
+GUICtrlSetFont($java32Sim,10)
+GUICtrlSetFont($java32Nao,10)
+;~ java 64...
+Local $grpjava64 = GUICtrlCreateGroup("Java JRE 64 bits?", 285, 315, 130, 40)
+GUICtrlSetFont($grpjava64,11, 280, "", "", 5)
+Local $java64Sim = GUICtrlCreateRadio("Sim", 300, 333, 50, 15)
+Local $java64Nao = GUICtrlCreateRadio("Não", 350, 333, 50, 15)
+GUICtrlSetFont($java64Sim,10)
+GUICtrlSetFont($java64Nao,10)
+;~ linha 3...
+;~ flash...
+Local $grpflash = GUICtrlCreateGroup("Flash Player?", 7, 360, 125, 40)
+GUICtrlSetFont($grpflash,11, 280, "", "", 5)
+Local $flashSim = GUICtrlCreateRadio("Sim", 17, 378, 50, 15)
+Local $flashNao = GUICtrlCreateRadio("Não", 77, 378, 50, 15)
+GUICtrlSetFont($flashSim,10)
+GUICtrlSetFont($flashNao,10)
+;~ winrar...
+Local $grpwrar = GUICtrlCreateGroup("WinRAR?", 145, 360, 115, 40)
+GUICtrlSetFont($grpwrar,11, 280, "", "", 5)
+Local $wrarSim = GUICtrlCreateRadio("Sim", 157, 378, 50, 15)
+Local $wrarNao = GUICtrlCreateRadio("Não", 207, 378, 50, 15)
+GUICtrlSetFont($wrarSim,10)
+GUICtrlSetFont($wrarNao,10)
+;~ disk defrag...
+Local $grpadd = GUICtrlCreateGroup("Auslogic Disk Defrag?", 265, 360, 160, 40)
+GUICtrlSetFont($grpadd,11, 280, "", "", 5)
+Local $addSim = GUICtrlCreateRadio("Sim", 290, 378, 50, 15)
+Local $addNao = GUICtrlCreateRadio("Não", 347, 378, 50, 15)
+GUICtrlSetFont($addSim,10)
+GUICtrlSetFont($addNao,10)
+;~ linha 4...
+;~ atube...
+Local $grpatube = GUICtrlCreateGroup("aTube?", 7, 405, 125, 40)
+GUICtrlSetFont($grpatube,11, 280, "", "", 5)
+Local $atubeSim = GUICtrlCreateRadio("Sim", 17, 423, 50, 15)
+Local $atubeNao = GUICtrlCreateRadio("Não", 77, 423, 50, 15)
+GUICtrlSetFont($atubeSim,10)
+GUICtrlSetFont($atubeNao,10)
+;~ pdfcreator...
+Local $grppdf = GUICtrlCreateGroup("PDF Creator?", 145, 405, 115, 40)
+GUICtrlSetFont($grppdf,11, 280, "", "", 5)
+Local $pdfSim = GUICtrlCreateRadio("Sim", 157, 423, 50, 15)
+Local $pdfNao = GUICtrlCreateRadio("Não", 207, 423, 50, 15)
+GUICtrlSetFont($pdfSim,10)
+GUICtrlSetFont($pdfNao,10)
+
+;~ office radios...
+Local $office = GUICtrlCreateGroup("Office", 7, 450, 420, 85, $BS_MULTILINE)
+GUICtrlSetFont($office, 11, 280, "", "", 5)
+Local $10_x86 = GUICtrlCreateRadio("2010 de 32 bits", 12, 465, 120, 20)
+Local $10_x64 = GUICtrlCreateRadio("2010 de 64 bits", 12, 485, 120, 20)
+Local $13_x86 = GUICtrlCreateRadio("2013 de 32 bits", 145, 465, 120, 20)
+Local $13_x64 = GUICtrlCreateRadio("2013 de 64 bits", 145, 485, 120, 20)
+Local $16_x86 = GUICtrlCreateRadio("2016 de 32 bits", 278, 465, 120, 20)
+Local $16_x64 = GUICtrlCreateRadio("2016 de 64 bits", 278, 485, 120, 20)
+Local $nof = GUICtrlCreateRadio("Sem Office", 12, 505, 120, 20)
+
+GUICtrlSetFont($10_x86,10)
+GUICtrlSetFont($10_x64,10)
+GUICtrlSetFont($13_x86,10)
+GUICtrlSetFont($13_x64,10)
+GUICtrlSetFont($16_x86,10)
+GUICtrlSetFont($16_x64,10)
+GUICtrlSetFont($nof,10)
+
+;~ configs prontas...
+Local $confP = GUICtrlCreateGroup("Configurações prontas", 3, 545, 430, 70, $BS_MULTILINE)
+GUICtrlSetFont($confP, 12, 600, "", "", 5)
+;~ links...
+Local $basic = GUICtrlCreateLabel("Somente Básicos", 15, 570, 130, 15)
+GUICtrlSetFont($basic, 10, 600, $GUI_FONTUNDER, "", 5)
+GUICtrlSetColor($basic, 0x0000FF)
+Local $bas_av = GUICtrlCreateLabel("Básicos + Antivírus", 145, 570, 160, 15)
+GUICtrlSetFont($bas_av, 10, 600, $GUI_FONTUNDER, "", 5)
+GUICtrlSetColor($bas_av, 0x00A741)
+Local $bas_pot = GUICtrlCreateLabel("Básicos + PotPlayer", 285, 570, 145, 15)
+GUICtrlSetFont($bas_pot, 10, 600, $GUI_FONTUNDER, "", 5)
+GUICtrlSetColor($bas_pot, 0xC70003)
+Local $lowprofile = GUICtrlCreateLabel("Micro de Baixo Desempenho", 15, 590, 200, 15)
+GUICtrlSetFont($lowprofile, 10, 600, $GUI_FONTUNDER, "", 5)
+GUICtrlSetColor($lowprofile, 0x0000FF)
+Local $highprofile = GUICtrlCreateLabel("Micro de Alto Desempenho", 225, 590, 200, 15)
+GUICtrlSetFont($highprofile, 10, 600, $GUI_FONTUNDER, "", 5)
+GUICtrlSetColor($highprofile, 0xC70003)
+
+;~ botões...
+Local $btn1 = GUICtrlCreateButton("Instalar", 3, 630, 430, 35)
+GUICtrlSetFont($btn1, 16, 600, "", "", 5)
+GUICtrlSetColor($btn1, 0x0000FF)
+Local $btn2 = GUICtrlCreateButton("Cancelar", 3, 670, 430, 35)
+GUICtrlSetFont($btn2, 12, 600, "", "", 5)
+GUICtrlSetColor($btn2, 0xFF0000)
+
+;~ variaveis...
+Global $total
+Global $pos = 1
+
+Global $resAdobe = "n"
+Global $resNet = "n"
+Global $resDx = "n"
+Global $resChrome = "n"
+Global $resJava32 = "n"
+Global $resJava64 = "n"
+Global $resFlash = "n"
+Global $resWrar = "n"
+Global $resAdd = "n"
+Global $resAtube = "n"
+Global $resPdf = "n"
+
+Global $player = "não"
+Global $av = "não"
+Global $resOffice = "não"
+
+GUISetState(@SW_SHOW)
+
+Func limpa_radios()
+    GUICtrlSetState($potplay, $GUI_UNCHECKED)
+    GUICtrlSetState($klmpplay, $GUI_UNCHECKED)
+    GUICtrlSetState($nplay, $GUI_UNCHECKED)
+	GUICtrlSetState($esetav, $GUI_UNCHECKED)
+	GUICtrlSetState($nav, $GUI_UNCHECKED)
+	GUICtrlSetState($adobeSim, $GUI_UNCHECKED)
+	GUICtrlSetState($adobeNao, $GUI_UNCHECKED)
+	GUICtrlSetState($netSim, $GUI_UNCHECKED)
+	GUICtrlSetState($netNao, $GUI_UNCHECKED)
+	GUICtrlSetState($dxSim, $GUI_UNCHECKED)
+	GUICtrlSetState($dxNao, $GUI_UNCHECKED)
+	GUICtrlSetState($chromeSim, $GUI_UNCHECKED)
+	GUICtrlSetState($chromeNao, $GUI_UNCHECKED)
+	GUICtrlSetState($java32Sim, $GUI_UNCHECKED)
+	GUICtrlSetState($java32Nao, $GUI_UNCHECKED)
+	GUICtrlSetState($java64Sim, $GUI_UNCHECKED)
+	GUICtrlSetState($java64Nao, $GUI_UNCHECKED)
+	GUICtrlSetState($flashSim, $GUI_UNCHECKED)
+	GUICtrlSetState($flashNao, $GUI_UNCHECKED)
+	GUICtrlSetState($wrarSim, $GUI_UNCHECKED)
+	GUICtrlSetState($wrarNao, $GUI_UNCHECKED)
+	GUICtrlSetState($addSim, $GUI_UNCHECKED)
+	GUICtrlSetState($addNao, $GUI_UNCHECKED)
+	GUICtrlSetState($atubeSim, $GUI_UNCHECKED)
+	GUICtrlSetState($atubeNao, $GUI_UNCHECKED)
+	GUICtrlSetState($pdfSim, $GUI_UNCHECKED)
+	GUICtrlSetState($pdfNao, $GUI_UNCHECKED)
+	GUICtrlSetState($10_x86, $GUI_UNCHECKED)
+	GUICtrlSetState($10_x64, $GUI_UNCHECKED)
+	GUICtrlSetState($13_x86, $GUI_UNCHECKED)
+	GUICtrlSetState($13_x64, $GUI_UNCHECKED)
+	GUICtrlSetState($16_x86, $GUI_UNCHECKED)
+	GUICtrlSetState($16_x64, $GUI_UNCHECKED)
+ EndFunc
+
+ ;~ funções para marcar radios...
+Func marcaplayer(ByRef $item)
+   If $item == $potplay Then
+	  GUICtrlSetState($potplay, $GUI_CHECKED)
+	  GUICtrlSetFont($potplay,10,600)
+	  GUICtrlSetFont($klmpplay,10)
+	  GUICtrlSetFont($nplay,10)
+	  $player = "potplay"
+   EndIf
+
+   If $item == $klmpplay Then
+	  GUICtrlSetState($klmpplay, $GUI_CHECKED)
+	  GUICtrlSetFont($klmpplay,10,600)
+	  GUICtrlSetFont($potplay,10)
+	  GUICtrlSetFont($nplay,10)
+	  $player = "klmp"
+   EndIf
+
+   If $item == $nplay Then
+	  GUICtrlSetState($nplay, $GUI_CHECKED)
+	  GUICtrlSetFont($nplay,10,600)
+	  GUICtrlSetFont($potplay,10)
+	  GUICtrlSetFont($klmpplay,10)
+	  $player = "nplay"
+   EndIf
+EndFunc
+
+Func marcaav(ByRef $item)
+   If $item == $esetav Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($esetav,10, 600)
+	  GUICtrlSetFont($nav,10)
+	  $av = "eset"
+   EndIf
+
+   If $item == $nav Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($nav,10, 600)
+	  GUICtrlSetFont($esetav,10)
+	  $av = "nav"
+   EndIf
+
+EndFunc
+
+Func marcaind(ByRef $sim, ByRef $nao, ByRef $item)
+   If $sim == $sim Then
+	  GUICtrlSetState($sim, $GUI_CHECKED)
+	  GUICtrlSetFont($sim,10, 600)
+	  GUICtrlSetFont($nao,10)
+	  $item = GUICtrlRead($sim, 1)
+   EndIf
+
+EndFunc
+
+Func marcaoffice(ByRef $item)
+   If $item == $10_x86 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($10_x86,10, 600)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($16_x64,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "10_x86"
+   EndIf
+   If $item == $10_x64 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($10_x64,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($16_x64,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "10_x64"
+   EndIf
+   If $item == $13_x86 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($13_x86,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($16_x64,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "13_x86"
+   EndIf
+   If $item == $13_x64 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($13_x64,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($16_x64,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "13_x64"
+   EndIf
+   If $item == $16_x86 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($16_x86,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x64,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "16_x86"
+   EndIf
+   If $item == $16_x64 Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($16_x64,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($nof,10)
+	  $resOffice = "16_x64"
+   EndIf
+   If $item == $nof Then
+	  GUICtrlSetState($item, $GUI_CHECKED)
+	  GUICtrlSetFont($nof,10, 600)
+	  GUICtrlSetFont($10_x86,10)
+	  GUICtrlSetFont($10_x64,10)
+	  GUICtrlSetFont($13_x86,10)
+	  GUICtrlSetFont($13_x64,10)
+	  GUICtrlSetFont($16_x86,10)
+	  GUICtrlSetFont($16_x64,10)
+	  $resOffice = "nof"
+   EndIf
+
+EndFunc
+
+Func total()
+   $total = 0
+
+   If $resAdobe == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resNet == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resDx == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resChrome == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resJava32 == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resJava64 == "Sim" Then
+	  $total = $total + 1
+   EndIf
+   If $resFlash == "Sim" Then
+	  $total = $total + 6
+   EndIf
+	  If $resWrar == "Sim" Then
+	  $total = $total + 1
+   EndIf
+     If $resAdd == "Sim" Then
+	  $total = $total + 1
+   EndIf
+     If $resAtube == "Sim" Then
+	  $total = $total + 1
+   EndIf
+     If $resPdf == "Sim" Then
+	  $total = $total + 1
+   EndIf
+
+     If $player == "potplay" Then
+	  $total = $total + 1
+   EndIf
+   If $player == "klmp" Then
+	  $total = $total + 1
+   EndIf
+
+   If $av == "eset" Then
+	  $total = $total + 1
+   EndIf
+
+   If $resOffice == "10_x86" Then
+	  $total = $total + 1
+   EndIf
+   If $resOffice == "10_x64" Then
+	  $total = $total + 1
+   EndIf
+   If $resOffice == "13_x86" Then
+	  $total = $total + 1
+   EndIf
+   If $resOffice == "13_x64" Then
+	  $total = $total + 1
+   EndIf
+   If $resOffice == "16_x86" Then
+	  $total = $total + 1
+   EndIf
+   If $resOffice == "16_x64" Then
+	  $total = $total + 1
+   EndIf
+
+EndFunc
+
+;~ limpezas...
+Func limpeza()
+Sleep(3000)
+GUICtrlSetData($status, "Limpando os arquivos temporários, aguarde...")
+GUICtrlSetData($barra1, 1)
+GUICtrlSetData(1, "1%")
+RunWait(@ScriptDir & "\cleartemp.exe")
+RunWait(@ScriptDir & "\fechanav.exe")
+RunWait("Taskkill /f /im plugin-container*")
+RunWait("Taskkill /f /im werfault*")
+GUICtrlSetData($barra1, 100)
+GUICtrlSetData(100, "1%")
+RunWait(@ScriptDir & "\fechanav.exe")
+ProcessClose("starter.exe")
+
+EndFunc
+
+While 1
+Switch GUIGetMsg()
+
+;~ ao clicar em instalar...
+   Case $btn1
+;~ validando se tudo está marcado...
+;~ avisos...
+	    If $player == "não" Then
+		 MsgBox(16, "Escolha um Player de vídeo", "Por favor, escolha um player de vídeo/codec para instalar." & @CRLF & "Para não instalar nenhum player/codec, escolha a opção " & Chr(34) & "Sem Player" & Chr(34))
+		ContinueLoop
+	  EndIf
+
+	  If $av == "não" Then
+		 MsgBox(16, "Escolha um Anti-vírus", "Por favor, escolha o anti-vírus para instalar." & @CRLF & "Para não instalar nenhum anti-vírus, escolha a opção " & Chr(34) & "Sem Anti-vírus" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resOffice = "não" Then
+		 MsgBox(16, "Escolha um Office", "Por favor, escolha uma versão do Office para instalar." & @CRLF & "Para não instalar nenhum Office, escolha a opção " & Chr(34) & "Sem Office" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resAdobe = "n" Then
+		 MsgBox(16, "Instalar o Adobe Reader?", "Por favor, escolha se deseja instalar o Adobe Reader ou não." & @CRLF & "Para não instalar o Adobe Reader, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Adobe Reader" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resNet = "n" Then
+		 MsgBox(16, "Instalar o .Net Framework 4.6.1?", "Por favor, escolha se deseja instalar o .Net Framework 4.6.1 ou não." & @CRLF & "Para não instalar o .Net Framework 4.6.1, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & ".Net Framework 4.6.1?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resDx = "n" Then
+		 MsgBox(16, "Instalar o DirectX?", "Por favor, escolha se deseja instalar o DirectX ou não." & @CRLF & "Para não instalar o DirectX, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "DirectX?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resChrome = "n" Then
+		 MsgBox(16, "Instalar o Google Chrome?", "Por favor, escolha se deseja instalar o Google Chrome ou não." & @CRLF & "Para não instalar o Google Chrome, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Google Chrome?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resJava32 = "n" Then
+		 MsgBox(16, "Instalar o Java JRE de 32 bits?", "Por favor, escolha se deseja instalar o Java JRE de 32 bits ou não." & @CRLF & "Para não instalar o Java JRE de 32 bits, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Java JRE 32 bits?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resJava64 = "n" Then
+		 MsgBox(16, "Instalar o Java JRE de 64 bits?", "Por favor, escolha se deseja instalar o Java JRE de 64 bits ou não." & @CRLF & "Para não instalar o Java JRE de 64 bits, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Java JRE 64 bits?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resFlash = "n" Then
+		 MsgBox(16, "Instalar o Flash Player?", "Por favor, escolha se deseja instalar o Flash Player ou não." & @CRLF & "Para não instalar o Flash Player, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Flash Player?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resWrar = "n" Then
+		 MsgBox(16, "Instalar o WinRAR?", "Por favor, escolha se deseja instalar o WinRAR ou não." & @CRLF & "Para não instalar o WinRAR, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "WinRAR?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resAdd = "n" Then
+		 MsgBox(16, "Instalar o Auslogic Disk Defrag?", "Por favor, escolha se deseja instalar o Auslogic Disk Defrag ou não." & @CRLF & "Para não instalar o Auslogic Disk Defrag, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "Auslogic Disk Defrag?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resAtube = "n" Then
+		 MsgBox(16, "Instalar o aTube?", "Por favor, escolha se deseja instalar o aTube ou não." & @CRLF & "Para não instalar o aTube, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "aTube?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+	  If $resPdf = "n" Then
+		 MsgBox(16, "Instalar o PDF Creator?", "Por favor, escolha se deseja instalar o PDF Creator ou não." & @CRLF & "Para não instalar o PDF Creator, escolha a opção " & Chr(34) & "Não" & Chr(34) & " em " & Chr(34) & "PDF Creator?" & Chr(34))
+		 ContinueLoop
+	  EndIf
+
+;~ fim avisos...
+;~ fim dos testes de seleção...
+
+;~ fechando a janela inicial...
+   GUISetState(@SW_HIDE)
+
+;~ abrindo a segunda tela...
+;~ ### SEGUNDA TELA ###
+Local $inst = GUICreate("Instalador de softwares para Windows - 2.0", 680, 185, -1, -1, $WS_EX_TOPMOST)
+GUISetBkColor(0xFFFFFF, $inst)
+
+Local $cred1 = GUICtrlCreateLabel("Desenvolvido por: Rafael Gioffi  -  rafaelgioffi@gmail.com", 1, 140, 675, 20, $SS_CENTER)
+GUICtrlSetFont($cred1, 8.5, 300, "", "", 5)
+GUICtrlSetColor($cred1, 0x0000FF)
+
+Local $bt1 = GUICtrlCreateButton("", 680, 185)
+
+;~ mensagem de status...
+$status = GUICtrlCreateLabel("", 2, 1, 670, 40, $SS_CENTER)
+GUICtrlSetFont(-1, 10, 600, "", "", 5)
+GUICtrlSetColor($status, 0xFF0000)
+;~ barra...
+$barra1 = GUICtrlCreateProgress(3, 45, 632, 25, 0x01)
+GUICtrlSetColor($barra1, 0x0000FF)
+$porc = GUICtrlCreateLabel("", 638, 52, 37, 15)
+GUICtrlSetFont(-1, 9, 600, "", "", 5)
+;~ softwares instalados...
+
+Local $adobeOn = GUICtrlCreatePic($imgdir & "adobe_reader.jpg", 10, 80, 48, 48)
+Local $adobeOff = GUICtrlCreatePic($imgdir & "adobe_reader_off.jpg", 10, 80, 48, 48)
+Local $adobeInst = _GUICtrlCreateGIF($imgdir & "adobe_reader.gif", "",10, 80, 48, 48)
+
+Local $dotnetOn = GUICtrlCreatePic($imgdir & ".net46.jpg", 60, 80, 48, 48)
+Local $dotnetOff = GUICtrlCreatePic($imgdir & ".net46_off.jpg", 60, 80, 48, 48)
+Local $dotnetInst = _GUICtrlCreateGIF($imgdir & ".net46.gif", "", 60, 80, 48, 48)
+
+Local $dxOn = GUICtrlCreatePic($imgdir & "directx9.jpg", 110, 80, 48, 48)
+Local $dxOff = GUICtrlCreatePic($imgdir & "directx9_off.jpg", 110, 80, 48, 48)
+Local $dxInst = _GUICtrlCreateGIF($imgdir & "directx9.gif", "", 110, 80, 48, 48)
+
+Local $chromeOn = GUICtrlCreatePic($imgdir & "chrome.jpg", 160, 80, 48, 48)
+Local $chromeOff = GUICtrlCreatePic($imgdir & "chrome_off.jpg", 160, 80, 48, 48)
+Local $chromeInst = _GUICtrlCreateGIF($imgdir & "chrome.gif", "", 160, 80, 48, 48)
+
+Local $javaOn = GUICtrlCreatePic($imgdir & "java.jpg", 210, 80, 48, 48)
+Local $javaOff = GUICtrlCreatePic($imgdir & "java_off.jpg", 210, 80, 48, 48)
+Local $javaInst = _GUICtrlCreateGIF($imgdir & "java.gif", "", 210, 80, 48, 48)
+
+Local $flashOn = GUICtrlCreatePic($imgdir & "flash.jpg", 260, 80, 48, 48)
+Local $flashOff = GUICtrlCreatePic($imgdir & "flash_off.jpg", 260, 80, 48, 48)
+Local $flashInst = _GUICtrlCreateGIF($imgdir & "flash.gif", "", 260, 80, 48, 48)
+
+Local $winrarOn = GUICtrlCreatePic($imgdir & "winrar.jpg", 310, 80, 48, 48)
+Local $winrarOff = GUICtrlCreatePic($imgdir & "winrar_off.jpg", 310, 80, 48, 48)
+Local $winrarInst = _GUICtrlCreateGIF($imgdir & "winrar.gif", "", 310, 80, 48, 48)
+
+Local $diskOn = GUICtrlCreatePic($imgdir & "diskdefrag.jpg", 360, 80, 48, 48)
+Local $diskOff = GUICtrlCreatePic($imgdir & "diskdefrag_off.jpg", 360, 80, 48, 48)
+Local $diskInst = _GUICtrlCreateGIF($imgdir & "diskdefrag.gif", "", 360, 80, 48, 48)
+
+Local $atubeOn = GUICtrlCreatePic($imgdir & "atube.jpg", 410, 80, 48, 48)
+Local $atubeOff = GUICtrlCreatePic($imgdir & "atube_off.jpg", 410, 80, 48, 48)
+Local $atubeInst = _GUICtrlCreateGIF($imgdir & "atube.gif", "", 410, 80, 48, 48)
+
+Local $pdfOn = GUICtrlCreatePic($imgdir & "pdfcreator.jpg", 460, 80, 48, 48)
+Local $pdfOff = GUICtrlCreatePic($imgdir & "pdfcreator_off.jpg", 460, 80, 48, 48)
+Local $pdfInst = _GUICtrlCreateGIF($imgdir & "pdfcreator.gif", "", 460, 80, 48, 48)
+
+Local $potOn = GUICtrlCreatePic($imgdir & "potplayer.jpg", 510, 80, 48, 48)
+Local $potOff = GUICtrlCreatePic($imgdir & "potplayer_off.jpg", 510, 80, 48, 48)
+Local $potInst = _GUICtrlCreateGIF($imgdir & "potplayer.gif", "", 510, 80, 48, 48)
+
+Local $klmpOn = GUICtrlCreatePic($imgdir & "klmp.jpg", 510, 80, 48, 48)
+Local $klmpOff = GUICtrlCreatePic($imgdir & "klmp_off.jpg", 510, 80, 48, 48)
+Local $klmpInst = _GUICtrlCreateGIF($imgdir & "klmp.gif", "", 510, 80, 48, 48)
+
+Local $esetOn = GUICtrlCreatePic($imgdir & "eset.jpg", 560, 80, 48, 48)
+Local $esetOff = GUICtrlCreatePic($imgdir & "eset_off.jpg", 560, 80, 48, 48)
+Local $esetInst = _GUICtrlCreateGIF($imgdir & "eset.gif", "", 560, 80, 48, 48)
+
+;~ validar imagens da versão do office...
+   If ($resOffice == "10_x86") Or ($resOffice == "10_x64") Then
+	  Local $officeOn = GUICtrlCreatePic($imgdir & "office2010.jpg", 610, 80, 48, 48)
+	  Local $officeOff = GUICtrlCreatePic($imgdir & "office2010_off.jpg", 610, 80, 48, 48)
+	  Local $officeInst = _GUICtrlCreateGIF($imgdir & "office2010.gif", "", 610, 80, 48, 48)
+   EndIf
+   If ($resOffice == "13_x86") Or ($resOffice == "13_x64") Then
+	  Local $officeOn = GUICtrlCreatePic($imgdir & "office2013.jpg", 610, 80, 48, 48)
+	  Local $officeOff = GUICtrlCreatePic($imgdir & "office2013_off.jpg", 610, 80, 48, 48)
+	  Local $officeInst = _GUICtrlCreateGIF($imgdir & "office2013.gif", "", 610, 80, 48, 48)
+   EndIf
+   If ($resOffice == "16_x86") Or ($resOffice == "16_x64") Then
+	  Local $officeOn = GUICtrlCreatePic($imgdir & "office2016.jpg", 610, 80, 48, 48)
+	  Local $officeOff = GUICtrlCreatePic($imgdir & "office2016_off.jpg", 610, 80, 48, 48)
+	  Local $officeInst = _GUICtrlCreateGIF($imgdir & "office2016.gif", "", 610, 80, 48, 48)
+   EndIf
+   If $resOffice == "nof" Then
+	  Local $officeOn = GUICtrlCreatePic($imgdir & "office2016_off.jpg", 610, 80, 48, 48)
+	  Local $officeOff = GUICtrlCreatePic($imgdir & "office2016_off.jpg", 610, 80, 48, 48)
+   EndIf
+
+;~ fim da validação das imagens...
+;~ exibindo a segunda tela...
+GUISetState(@SW_SHOW)
+
+;~ ocultando os ícones...
+GUICtrlSetState($adobeOn, $GUI_HIDE)
+GUICtrlSetState($adobeOff, $GUI_HIDE)
+GUICtrlSetState($adobeInst, $GUI_HIDE)
+
+GUICtrlSetState($dotnetOn, $GUI_HIDE)
+GUICtrlSetState($dotnetOff, $GUI_HIDE)
+GUICtrlSetState($dotnetInst, $GUI_HIDE)
+
+GUICtrlSetState($dxOn, $GUI_HIDE)
+GUICtrlSetState($dxOff, $GUI_HIDE)
+GUICtrlSetState($dxInst, $GUI_HIDE)
+
+GUICtrlSetState($chromeOn, $GUI_HIDE)
+GUICtrlSetState($chromeOff, $GUI_HIDE)
+GUICtrlSetState($chromeInst, $GUI_HIDE)
+
+GUICtrlSetState($javaOn, $GUI_HIDE)
+GUICtrlSetState($javaOff, $GUI_HIDE)
+GUICtrlSetState($javaInst, $GUI_HIDE)
+
+GUICtrlSetState($flashOn, $GUI_HIDE)
+GUICtrlSetState($flashOff, $GUI_HIDE)
+GUICtrlSetState($flashInst, $GUI_HIDE)
+
+GUICtrlSetState($winrarOn, $GUI_HIDE)
+GUICtrlSetState($winrarOff, $GUI_HIDE)
+GUICtrlSetState($winrarInst, $GUI_HIDE)
+
+GUICtrlSetState($diskOn, $GUI_HIDE)
+GUICtrlSetState($diskOff, $GUI_HIDE)
+GUICtrlSetState($diskInst, $GUI_HIDE)
+
+GUICtrlSetState($atubeOn, $GUI_HIDE)
+GUICtrlSetState($atubeOff, $GUI_HIDE)
+GUICtrlSetState($atubeInst, $GUI_HIDE)
+
+GUICtrlSetState($pdfOn, $GUI_HIDE)
+GUICtrlSetState($pdfOff, $GUI_HIDE)
+GUICtrlSetState($pdfInst, $GUI_HIDE)
+
+GUICtrlSetState($potOn, $GUI_HIDE)
+GUICtrlSetState($potOff, $GUI_HIDE)
+GUICtrlSetState($potInst, $GUI_HIDE)
+
+GUICtrlSetState($klmpOn, $GUI_HIDE)
+GUICtrlSetState($klmpOff, $GUI_HIDE)
+GUICtrlSetState($klmpInst, $GUI_HIDE)
+
+GUICtrlSetState($esetOn, $GUI_HIDE)
+GUICtrlSetState($esetOff, $GUI_HIDE)
+GUICtrlSetState($esetInst, $GUI_HIDE)
+
+If $resOffice <> "nof" Then
+   GUICtrlSetState($officeOn, $GUI_HIDE)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+
+;~ chama a função para calcular o total...
+total()
+;~ define a posição da barra para 1...
+$pos = 1
+;~ criando pastas...
+GUICtrlSetData($status, "Preparando o sistema para iniciar as instalações, aguarde...")
+If $resAdobe == "Sim" Then
+   DirCreate(@TempDir & "\ARDC")
+EndIf
+GUICtrlSetData($barra1, (($pos*100)/$total))
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+$pos = $pos + 1
+If $resDx == "Sim" Then
+   DirCreate(@TempDir & "\DX9")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resFlash == "Sim" Then
+   DirCreate(@TempDir & "\FLASH")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resChrome == "Sim" Then
+   DirCreate(@TempDir & "\Chrome")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resJava32 == "Sim" Then
+   DirCreate(@TempDir & "\JAVA")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resJava64 == "Sim" Then
+   DirCreate(@TempDir & "\JAVAx64")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+;~ verificar player...
+If $player == "potplay" Then
+   DirCreate(@TempDir & "\potplayerx64")
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+EndIf
+If $player == "klmp" Then
+   DirCreate(@TempDir & "\klmp")
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+EndIf
+$pos = $pos + 1
+;~ fim verificar player...
+If $resAtube == "Sim" Then
+   DirCreate(@TempDir & "\atube")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resAdd == "Sim" Then
+   DirCreate(@TempDir & "\disk")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resNet == "Sim" Then
+   DirCreate(@TempDir & "\dotnet461")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resWrar == "Sim" Then
+   FileCopy(@ScriptDir & "\WinRar_540_x64.exe", @TempDir, $FC_OVERWRITE)
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+If $resPdf == "Sim" Then
+   DirCreate(@TempDir & "\pdfcreator")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+;~ verificar eset...
+If $av == "eset" Then
+   DirCreate(@TempDir & "\eset")
+EndIf
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+$pos = $pos + 1
+;~ fim da verificação eset...
+;~ verificar Office...
+If ($resOffice == "10_x86") Or ($resOffice == "10_x64") Then
+   DirCreate(@TempDir & "\office2010")
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+EndIf
+If ($resOffice == "13_x86") Or ($resOffice == "13_x64") Then
+   DirCreate(@TempDir & "\office2013")
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+EndIf
+If ($resOffice == "16_x86") Or ($resOffice == "16_x64") Then
+   DirCreate(@TempDir & "\office2016")
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+GUICtrlSetData($barra1, (($pos*100)/$total))
+EndIf
+;~ fim da verificação do Office...
+;~ fim da criação de pastas...
+
+;~ extraindo...
+$pos = 1
+GUICtrlSetData($barra1, (($pos*100)/$total))
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+If $resAdobe == "Sim" Then
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Adobe Reader DC")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\AdobeReaderDC.exe " & @TempDir & "\ARDC", "", "", @SW_HIDE)
+EndIf
+
+If $resDx == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o DirectX 9.0")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\DX90C_JUN10.exe " & @TempDir & "\DX9", "", "", @SW_HIDE)
+EndIf
+
+If $resFlash == "Sim" Then
+   $pos = $pos + 6
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Flash Player")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Flash_Player.exe " & @TempDir & "\FLASH", "", "", @SW_HIDE)
+EndIf
+
+If $resChrome == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Google Chrome")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Google_Chrome.exe " & @TempDir & "\chrome", "", "", @SW_HIDE)
+EndIf
+
+If $resJava32 == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Java RunTime")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\JAVA_X86.exe " & @TempDir & "\JAVA", "", "", @SW_HIDE)
+EndIf
+
+If $resJava64 == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Java RunTime 64 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\JAVA_x64.exe " & @TempDir & "\JAVAx64", "", "", @SW_HIDE)
+EndIf
+
+If $resPdf == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o PDF Creator")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\PDFCreator.exe " & @TempDir & "\pdfcreator", "", "", @SW_HIDE)
+EndIf
+
+;~ verificação do player...
+If $player == "potplay" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o PotPlayer 1.7")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Potplayer_1.7_x64.exe " & @TempDir & "\potplayerx64", "", "", @SW_HIDE)
+;~    GUICtrlSetData($barra1, (($pos*100)/$total))
+;~    GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+EndIf
+If $player == "klmp" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o K-Lite Mega Pack")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\K-LITE_MEGA-PACK.exe " & @TempDir & "\klmp", "", "", @SW_HIDE)
+;~    GUICtrlSetData($barra1, (($pos*100)/$total))
+;~    GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+EndIf
+;~ If $player == "nplay" Then
+;~    $pos = $pos + 1
+;~    GUICtrlSetData($barra1, (($pos*100)/$total))
+;~    GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+;~
+;~ EndIf
+;~ fim da verificação do player...
+If $resAtube == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o aTube")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\aTube.exe " & @TempDir & "\atube", "", "", @SW_HIDE)
+EndIf
+
+If $resAdd == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Auslogic Disk Defrag")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Auslogic_DiskDefrag.exe " & @TempDir & "\disk", "", "", @SW_HIDE)
+EndIf
+
+If $resNet == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o .NET Framework 4.6.1")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\DOTNET_4.6.1.exe " & @TempDir & "\dotnet461", "", "", @SW_HIDE)
+EndIf
+
+;~ verificação av...
+If $av == "eset" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o ESET Anti-Virus 11 x64")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\ESET11_x64_ptBR.exe " & @TempDir & "\eset", "", "", @SW_HIDE)
+EndIf
+
+;~ fim da verificação av...
+;~ verificação Office...
+If $resOffice == "10_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2010 de 32 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2010_x86.exe " & @TempDir & "\office2010", "", "", @SW_HIDE)
+EndIf
+If $resOffice == "10_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2010 de 64 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2010_x64.exe " & @TempDir & "\office2010", "", "", @SW_HIDE)
+EndIf
+If $resOffice == "13_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2013 de 32 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2013_x86.exe " & @TempDir & "\office2013", "", "", @SW_HIDE)
+EndIf
+If $resOffice == "13_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2013 de 64 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2013_x64.exe " & @TempDir & "\office2013", "", "", @SW_HIDE)
+EndIf
+If $resOffice == "16_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2016 de 32 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2016_x86.exe " & @TempDir & "\office2016", "", "", @SW_HIDE)
+EndIf
+If $resOffice == "16_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Extraindo os arquivos necessários para instalar o Office 2016 de 64 bits")
+   ShellExecuteWait(@ScriptDir & "\RAR.exe"," x -o+ " & @ScriptDir & "\Office_2016_x64.exe " & @TempDir & "\office2016", "", "", @SW_HIDE)
+EndIf
+
+;~ fim da verificação do Office...
+;~ fim da extração...
+
+;~ instalando...
+$pos = 1
+;~ GUICtrlSetState($grupo, $GUI_SHOW)
+;~ adobe reader...
+GUICtrlSetData($barra1, $pos)
+GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+If $resAdobe == "Sim" Then
+   GUICtrlSetState($adobeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Adobe Reader DC" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\ardc\AcroRdrDC1500720033_pt_BR.exe"," /sPB /rs", "", "")
+   GUICtrlSetState($adobeOn, $GUI_SHOW)
+   GUICtrlSetState($adobeOff, $GUI_HIDE)
+   GUICtrlSetState($adobeInst, $GUI_HIDE)
+EndIf
+If $resAdobe == "Não" Then
+   GUICtrlSetState($adobeOff, $GUI_SHOW)
+EndIf
+;~ .net...
+
+If $resNet == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($dotnetInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o .NET Framework 4.6.1" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\dotnet461\NDP461.exe"," /q /norestart", "", "", @SW_HIDE)
+   GUICtrlSetState($dotnetOn, $GUI_SHOW)
+   GUICtrlSetState($dotnetOff, $GUI_HIDE)
+   GUICtrlSetState($dotnetInst, $GUI_HIDE)
+EndIf
+If $resNet == "Não" Then
+   GUICtrlSetState($dotnetOff, $GUI_SHOW)
+EndIf
+;~ directx...
+
+If $resDx == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($dxInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o DirectX 9.0c" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\DX9\DXSetup.exe"," /silent", "", "", @SW_HIDE)
+   GUICtrlSetState($dxOn, $GUI_SHOW)
+   GUICtrlSetState($dxOff, $GUI_HIDE)
+   GUICtrlSetState($dxInst, $GUI_HIDE)
+EndIf
+If $resDx == "Não" Then
+   GUICtrlSetState($dxOff, $GUI_SHOW)
+EndIf
+;~ chrome...
+
+If $resChrome == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($chromeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Google Chrome" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\chrome\ChromeStandaloneSetup.exe"," /silent /install", "", "", @SW_HIDE)
+   GUICtrlSetState($chromeOn, $GUI_SHOW)
+   GUICtrlSetState($chromeOff, $GUI_HIDE)
+   GUICtrlSetState($chromeInst, $GUI_HIDE)
+EndIf
+If $resChrome == "Não" Then
+   GUICtrlSetState($chromeOff, $GUI_SHOW)
+EndIf
+;~java 32...
+
+If $resJava32 == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($javaInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Java RunTime de 32 bits" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\java\jre-windows-i586.exe"," INSTALL_SILENT=Enable STATIC=Enable REBOOT=Disable AUTO_UPDATE=Enable SPONSORS=Disable", "", "", @SW_HIDE)
+   GUICtrlSetState($javaOn, $GUI_SHOW)
+   GUICtrlSetState($javaOff, $GUI_HIDE)
+   GUICtrlSetState($javaInst, $GUI_HIDE)
+EndIf
+If $resJava32 == "Não" Then
+   GUICtrlSetState($javaOff, $GUI_SHOW)
+EndIf
+;~ java64...
+
+If $resJava64 == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($javaInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Java RunTime de 64 bits" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\javax64\jre-windows-x64.exe"," INSTALL_SILENT=Enable STATIC=Enable REBOOT=Disable AUTO_UPDATE=Enable SPONSORS=Disable", "", "", @SW_HIDE)
+   GUICtrlSetState($javaOn, $GUI_SHOW)
+   GUICtrlSetState($javaOff, $GUI_HIDE)
+   GUICtrlSetState($javaInst, $GUI_HIDE)
+EndIf
+;~ If $resJava64 == "Não" Then
+;~    GUICtrlSetState($javaOff, $GUI_SHOW)
+;~ EndIf
+If $resJava32 == "Sim" Or $resJava64 == "Sim" Then
+   GUICtrlSetState($javaOn, $GUI_SHOW)
+EndIf
+If $resJava32 == "Não" And $resJava64 == "Não" Then
+   GUICtrlSetState($javaOff, $GUI_SHOW)
+EndIf
+
+;~ flash...
+
+If $resFlash == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($flashInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Desinstalando o Flash Player atual para Internet Explorer" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player_ax.exe"," -uninstall", "", "", @SW_HIDE)
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Desinstalando o Flash Player atual para Firefox" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player.exe"," -uninstall", "", "", @SW_HIDE)
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Desinstalando o Flash Player atual para Chrome" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player_ppapi.exe"," -uninstall", "", "", @SW_HIDE)
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Instalando o Flash Player mais recente para Internet Explorer" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player_ax.exe"," -install", "", "", @SW_HIDE)
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Instalando o Flash Player mais recente para Firefox" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player.exe"," -install", "", "", @SW_HIDE)
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetData($status, "Instalando o Flash Player mais recente para Chrome" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\flash\install_flash_player_ppapi.exe"," -install", "", "", @SW_HIDE)
+
+   GUICtrlSetState($flashOn, $GUI_SHOW)
+   GUICtrlSetState($flashOff, $GUI_HIDE)
+   GUICtrlSetState($flashInst, $GUI_HIDE)
+EndIf
+If $resFlash == "Não" Then
+   GUICtrlSetState($flashOff, $GUI_SHOW)
+EndIf
+;~ winrar...
+
+If $resWrar == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($winrarInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o WinRar 5.40" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\WinRar_540_x64.exe","", "", "", @SW_HIDE)
+   GUICtrlSetState($winrarOn, $GUI_SHOW)
+   GUICtrlSetState($winrarOff, $GUI_HIDE)
+   GUICtrlSetState($winrarInst, $GUI_HIDE)
+EndIf
+If $resWrar == "Não" Then
+   GUICtrlSetState($winrarOff, $GUI_SHOW)
+EndIf
+;~ auslogic...
+
+If $resAdd == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($diskInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Auslogic Disk Defrag" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\disk\disk-defrag-setup.exe"," /SILENT", "", "", @SW_HIDE)
+   Sleep(10000)
+   RunWait(@ScriptDir & "\fechanav.exe")
+   ProcessWait("diskdefrag.exe", 10)
+   ProcessClose("diskdefrag.exe")
+   GUICtrlSetState($diskOn, $GUI_SHOW)
+   GUICtrlSetState($diskOff, $GUI_HIDE)
+   GUICtrlSetState($diskInst, $GUI_HIDE)
+EndIf
+If $resAdd == "Não" Then
+   GUICtrlSetState($diskOff, $GUI_SHOW)
+EndIf
+;~ atube...
+
+If $resAtube == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($atubeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o aTube Catcher" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\atube\atube.exe","", "", "", @SW_HIDE)
+   RunWait(@ScriptDir & "\fechanav.exe")
+   GUICtrlSetState($atubeOn, $GUI_SHOW)
+   GUICtrlSetState($atubeOff, $GUI_HIDE)
+   GUICtrlSetState($atubeInst, $GUI_HIDE)
+EndIf
+If $resAtube == "Não" Then
+   GUICtrlSetState($atubeOff, $GUI_SHOW)
+EndIf
+;~ pdf creator...
+
+If $resPdf == "Sim" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($pdfInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o PDF Creator" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\pdfcreator\PDFCreator-setup.exe", " /ForceInstall /SILENT /LANG=Portugues /COMPONENTS=" & Chr(34) & "program,ghostscript" & Chr(34) & " /NORESTART", "", "", @SW_HIDE)
+   GUICtrlSetState($pdfOn, $GUI_SHOW)
+   GUICtrlSetState($pdfOff, $GUI_HIDE)
+   GUICtrlSetState($pdfInst, $GUI_HIDE)
+EndIf
+If $resPdf == "Não" Then
+   GUICtrlSetState($pdfOff, $GUI_SHOW)
+EndIf
+;~ player...
+;~ validando player...
+If $player == "potplay" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($potInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o PotPlayer 1.7" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\potplayerx64\potplay.exe","", "", "", @SW_HIDE)
+   GUICtrlSetState($potOn, $GUI_SHOW)
+   GUICtrlSetState($potOff, $GUI_HIDE)
+   GUICtrlSetState($potInst, $GUI_HIDE)
+EndIf
+If $player == "klmp" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($klmpInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o K-Lite Mega Pack" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\klmp\K-Lite_Codec_Pack_Mega.exe"," /verysilent /norestart /LoadInf=" & Chr(34) & ".\klcp_mega_unattended.ini" & Chr(34), "", "", @SW_HIDE)
+   GUICtrlSetState($klmpOn, $GUI_SHOW)
+   GUICtrlSetState($klmpOff, $GUI_HIDE)
+   GUICtrlSetState($klmpInst, $GUI_HIDE)
+EndIf
+;~ fim da validação dos players...
+;~ validando av...
+
+If $av == "eset" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($esetInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o ESET Anti-Virus 11 x64" & @CRLF & "Processo " & $pos & " de " & $total)
+;~ Local $es_cmd = "/i " & @TempDir & "\eset\eav_nt64_ptb.msi /qb! REBOOT=" & Chr(34) & "ReallySuppress" & Chr(34) & " ADMINCFG=" & chr(34) & @TempDir & "\eset\NODx64_Configs.xml" & Chr(34)
+;~ ShellExecuteWait("msiexec", $es_cmd, "", "")
+   ShellExecuteWait(@TempDir & "\eset\eset11.exe")
+;~ ShellExecuteWait(@TempDir & "\eset\tnod.exe", "", "", "")
+   GUICtrlSetState($esetOn, $GUI_SHOW)
+   GUICtrlSetState($esetOff, $GUI_HIDE)
+   GUICtrlSetState($esetInst, $GUI_HIDE)
+EndIf
+;~ fim da validação do av...
+;~ validando o office...
+
+If $resOffice == "10_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2010 x86" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2010\office_10_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+
+If $resOffice == "10_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2010 x64" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2010\office_10_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+If $resOffice == "13_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2013 x86" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2013\office_13_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+If $resOffice == "13_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2013 x64" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2013\office_13_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+If $resOffice == "16_x86" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2016 x86" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2016\office_16_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+If $resOffice == "16_x64" Then
+   $pos = $pos + 1
+   GUICtrlSetData($barra1, (($pos*100)/$total))
+   GUICtrlSetData($porc, Int((($pos*100)/$total)) & "%")
+   GUICtrlSetState($officeInst, $GUI_SHOW)
+   GUICtrlSetData($status, "Instalando o Office 2016 x64" & @CRLF & "Processo " & $pos & " de " & $total)
+   ShellExecuteWait(@TempDir & "\office2016\office_16_select.exe", "", "", "", @SW_HIDE)
+   GUICtrlSetState($officeOn, $GUI_SHOW)
+   GUICtrlSetState($officeOff, $GUI_HIDE)
+   GUICtrlSetState($officeInst, $GUI_HIDE)
+EndIf
+;~ fim da validação do Office...
+;~ fim das instalações...
+limpeza()
+
+;~ players...
+Case $potplay
+   marcaplayer($potplay)
+
+Case $klmpplay
+   marcaplayer($klmpplay)
+
+Case $nplay
+   marcaplayer($nplay)
+
+;~ av...
+Case $esetav
+   marcaav($esetav)
+
+Case $nav
+   marcaav($nav)
+
+;~ basicos...
+Case $adobeSim
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+
+Case $adobeNao
+   marcaind($adobeNao, $adobeSim, $resAdobe)
+
+Case $netSim
+   marcaind($netSim, $netNao, $resNet)
+
+Case $netNao
+   marcaind($netNao, $netSim, $resNet)
+
+Case $dxSim
+   marcaind($dxSim, $dxNao, $resDx)
+
+Case $dxNao
+   marcaind($dxNao, $dxSim, $resDx)
+
+Case $chromeSim
+   marcaind($chromeSim, $chromeNao, $resChrome)
+
+Case $chromeNao
+   marcaind($chromeNao, $chromeSim, $resChrome)
+
+Case $java32Sim
+   marcaind($java32Sim, $java32Nao, $resJava32)
+
+Case $java32Nao
+   marcaind($java32Nao, $java32Sim, $resJava32)
+
+Case $java64Sim
+   marcaind($java64Sim, $java64Nao, $resJava64)
+
+Case $java64Nao
+   marcaind($java64Nao, $java64Sim, $resJava64)
+
+Case $flashSim
+   marcaind($flashSim, $flashNao, $resFlash)
+
+Case $flashNao
+   marcaind($flashNao, $flashSim, $resFlash)
+
+Case $wrarSim
+   marcaind($wrarSim, $wrarNao, $resWrar)
+
+Case $wrarNao
+    marcaind($wrarNao, $wrarSim, $resWrar)
+
+Case $addSim
+   marcaind($addSim, $addNao, $resAdd)
+
+Case $addNao
+    marcaind($addNao, $addSim, $resAdd)
+
+Case $atubeSim
+   marcaind($atubeSim, $atubeNao, $resAtube)
+
+Case $atubeNao
+   marcaind($atubeNao, $atubeSim, $resAtube)
+
+Case $pdfSim
+   marcaind($pdfSim, $pdfNao, $resPdf)
+
+Case $pdfNao
+   marcaind($pdfNao, $pdfSim, $resPdf)
+
+Case $10_x86
+   marcaoffice($10_x86)
+
+Case $10_x64
+   marcaoffice($10_x64)
+
+Case $13_x86
+   marcaoffice($13_x86)
+
+Case $13_x64
+   marcaoffice($13_x64)
+
+Case $16_x86
+   marcaoffice($16_x86)
+
+Case $16_x64
+   marcaoffice($16_x64)
+
+Case $nof
+   marcaoffice($nof)
+
+;~ links...
+Case $basic
+   limpa_radios()
+   marcaplayer($nplay)
+   marcaav($nav)
+   marcaoffice($nof)
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+   marcaind($netSim, $netNao, $resNet)
+   marcaind($dxSim, $dxNao, $resDx)
+   marcaind($chromeNao, $chromeSim, $resChrome)
+   marcaind($java32Sim, $java32Nao, $resJava32)
+   marcaind($java64Nao, $java64Sim, $resJava64)
+   marcaind($flashSim, $flashNao, $resFlash)
+   marcaind($wrarSim, $wrarNao, $resWrar)
+   marcaind($addNao, $addSim, $resAdd)
+   marcaind($atubeNao, $atubeSim, $resAtube)
+   marcaind($pdfSim, $pdfNao, $resPdf)
+   ContinueLoop
+
+;~ basicos...
+Case $bas_av
+   limpa_radios()
+   marcaplayer($nplay)
+   marcaav($esetav)
+   marcaoffice($nof)
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+   marcaind($netSim, $netNao, $resNet)
+   marcaind($dxSim, $dxNao, $resDx)
+   marcaind($chromeNao, $chromeSim, $resChrome)
+   marcaind($java32Sim, $java32Nao, $resJava32)
+   marcaind($java64Nao, $java64Sim, $resJava64)
+   marcaind($flashSim, $flashNao, $resFlash)
+   marcaind($wrarSim, $wrarNao, $resWrar)
+   marcaind($addNao, $addSim, $resAdd)
+   marcaind($atubeNao, $atubeSim, $resAtube)
+   marcaind($pdfSim, $pdfNao, $resPdf)
+   ContinueLoop
+
+Case $bas_pot
+   limpa_radios()
+   marcaplayer($potplay)
+   marcaav($esetav)
+   marcaoffice($nof)
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+   marcaind($netSim, $netNao, $resNet)
+   marcaind($dxSim, $dxNao, $resDx)
+   marcaind($chromeNao, $chromeSim, $resChrome)
+   marcaind($java32Sim, $java32Nao, $resJava32)
+   marcaind($java64Nao, $java64Sim, $resJava64)
+   marcaind($flashSim, $flashNao, $resFlash)
+   marcaind($wrarSim, $wrarNao, $resWrar)
+   marcaind($addNao, $addSim, $resAdd)
+   marcaind($atubeNao, $atubeSim, $resAtube)
+   marcaind($pdfSim, $pdfNao, $resPdf)
+   ContinueLoop
+
+Case $lowprofile
+limpa_radios()
+   marcaplayer($klmpplay)
+   marcaav($esetav)
+   marcaoffice($10_x86)
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+   marcaind($netSim, $netNao, $resNet)
+   marcaind($dxSim, $dxNao, $resDx)
+   marcaind($chromeSim, $chromeNao, $resChrome)
+   marcaind($java32Sim, $java32Nao, $resJava32)
+   marcaind($java64Nao, $java64Sim, $resJava64)
+   marcaind($flashSim, $flashNao, $resFlash)
+   marcaind($wrarSim, $wrarNao, $resWrar)
+   marcaind($addSim, $addNao, $resAdd)
+   marcaind($atubeNao, $atubeSim, $resAtube)
+   marcaind($pdfSim, $pdfNao, $resPdf)
+   ContinueLoop
+
+Case $highprofile
+   limpa_radios()
+   marcaplayer($potplay)
+   marcaav($esetav)
+   marcaoffice($16_x64)
+   marcaind($adobeSim, $adobeNao, $resAdobe)
+   marcaind($netSim, $netNao, $resNet)
+   marcaind($dxSim, $dxNao, $resDx)
+   marcaind($chromeSim, $chromeNao, $resChrome)
+   marcaind($java32Sim, $java32Nao, $resJava32)
+   marcaind($java64Nao, $java64Sim, $resJava64)
+   marcaind($flashSim, $flashNao, $resFlash)
+   marcaind($wrarSim, $wrarNao, $resWrar)
+   marcaind($addSim, $addNao, $resAdd)
+   marcaind($atubeSim, $atubeNao, $resAtube)
+   marcaind($pdfSim, $pdfNao, $resPdf)
+   ContinueLoop
+
+Case $GUI_EVENT_CLOSE, $btn2
+   ExitLoop
+
+   Case $cred1
+   ShellExecute("mailto:rafaelgioffi@gmail.com")
+   ContinueLoop
+
+   EndSwitch
+WEnd
